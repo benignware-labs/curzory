@@ -1,0 +1,78 @@
+.slideview-button {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+}
+
+.slideview-button,
+.slideview-button.slideview-button-disabled:hover {
+  color: lightgray;
+}
+
+.slideview-button:hover {
+  color: gray;
+}
+
+.slideview-button.slideview-button-disabled {
+  opacity: 0.25;
+  cursor: default;
+}
+
+.slideview-prev {
+  top: 50%;
+  left: 20px;
+  text-align: left;
+}
+
+.slideview-next {
+  top: 50%;
+  right: 20px;
+  text-align: right;
+}
+
+.slideview-button:before {
+  display: inline-block;
+  margin-top: -20px;
+  font-weight: lighter;
+  font-size: 60px;
+  line-height: 40px;
+  vertical-align: middle;
+}
+
+.slideview-prev:before {
+  content: "\276C";
+}
+
+.slideview-next:before {
+  content: "\276D";
+}
+
+.slideview-pagination {
+  height: auto;
+  width: 100%;
+  position: absolute;
+  bottom: 20px;
+  text-align: center;
+  background: rgba(0,0,0,0);
+}
+
+.slideview-pagination-item {
+  width: 10px;
+  height: 10px;
+  display: inline-block;
+  cursor: pointer;
+  margin: 2px 6px;
+  background: white;
+  border: 1px solid lightgray;
+  border-radius: 50%;
+}
+
+.slideview-pagination-item:hover {
+  text-decoration: none;
+  background: lightgray;
+}
+
+.slideview-pagination-item.slideview-pagination-active {
+  background: lightgray;
+}
