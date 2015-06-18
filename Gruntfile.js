@@ -25,7 +25,7 @@ module.exports = function(grunt) {
       samples: {
         expand: true,
         cwd: 'dist',
-        src: ['jquery.curzory.js'],
+        src: ['**/*'],
         dest: 'samples/dist/'
       }
     },
