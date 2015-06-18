@@ -147,7 +147,7 @@ function CursorManager(options) {
     try {
       e.type;
     } catch (e) {
-      console.warn(e);
+      //console.warn(e);
       return;
     }
     // Update Mouse Position
