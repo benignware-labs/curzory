@@ -8,12 +8,24 @@
     <script src="dist/jquery.curzory.js"></script>
     
     <script>
+    
       
      $(function() {
-       $(".cursor-pane").curzory({
-         symbol: '<i class="cursor-symbol glyphicon glyphicon-heart"></i>'
-       }).on('click', function() {
-         $(this).toggleClass('red');
+       /*
+        var cursor = new Cursor(null, {
+          //bounds: $('.cursor-pane')[0],
+          bounds: {x: 0, y: 0, width: "50%", height: "100%"},
+          symbol: $('.cursor-icon')[0]
+        });
+        */
+       
+       
+       $("*[contenteditable]").curzory({
+         symbol: '<i class="cursor-symbol glyphicon glyphicon-pencil"></i>'
+       });
+       
+       $("form").curzory({
+         symbol: '<i class="cursor-symbol glyphicon glyphicon-pencil"></i>'
        });
        
      });
@@ -27,25 +39,46 @@
         padding: 0
       }
       
-      .cursor-pane .cursor-symbol {
-        color: red;
+      *[contenteditable] .cursor-symbol {
+        color: black;
         font-size: 16px;
       }
       
-      .cursor-pane.red {
-        color: red;
+      *[contenteditable]:hover:not(:focus) {
+        color: lightgray;
       }
       
     </style>
   </head>
   <body>
+    <div>
+      
+      
       
       <div class="container">
         
-        <h1>Hello</h1>
-        <p class="cursor-pane">
+        <h1 contenteditable="true">Hello</h1>
+        <p contenteditable="true">
           Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Etiam ultricies nisi vel augue. Curabitur ullamcorper ultricies nisi. Nam eget dui. Etiam rhoncus. Maecenas tempus, tellus eget condimentum rhoncus, sem quam semper libero, sit amet adipiscing sem neque sed ipsum. Nam quam nunc, blandit vel, luctus pulvinar, hendrerit id, lorem. Maecenas nec odio et ante tincidunt tempus. Donec vitae sapien ut libero venenatis faucibus. Nullam quis ante. Etiam sit amet orci eget eros faucibus tincidunt. Duis leo. Sed fringilla mauris sit amet nibh. Donec sodales sagittis magna. Sed consequat, leo eget bibendum sodales, augue velit cursus nunc,
         </p>
+      
+        <h1>Hello</h1>
+        <form role="form">
+          <div class="form-group">
+            <label for="email">Email address:</label>
+            <input type="email" class="form-control" id="email">
+          </div>
+          <div class="form-group">
+            <label for="pwd">Password:</label>
+            <input type="password" class="form-control" id="pwd">
+          </div>
+          <div class="checkbox">
+            <label><input type="checkbox"> Remember me</label>
+          </div>
+          <button type="submit" class="btn btn-default">Submit</button>
+        </form>
+      </div>
+      
       
     </div>
   </body>
