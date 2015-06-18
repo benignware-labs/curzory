@@ -51,6 +51,9 @@ function findHighestAbsoluteIndex(element1, element2){
 
   // Is one element a descendent of the other?
   var commonAncestor = findCommonAncestor(arr1, arr2);
+  if (!commonAncestor) {
+    return element1;
+  }
   if (commonAncestor == element1) return element2;
   if (commonAncestor == element2) return element1;
 
