@@ -12,7 +12,7 @@ var
       }
     }
     return obj;
-  }
+  },
 
   createElement = function(string) {
     var element = document.createElement('div');
@@ -29,7 +29,7 @@ var
 
   getElement = function(value, parent) {
   
-    value = value instanceof Array ? value[0] : value;
+    value = value.toArray ? value.toArray()[0] : value instanceof Array ? value[0] : value;
     
     if (typeof value === 'function') {
       value = value.call(this, value);
@@ -94,8 +94,7 @@ module.exports = function Cursor(element, options) {
         case 'symbol':
         case 'bounds':
         case 'target':
-          value = value instanceof Array ? value[0] : value;
-          //value = typeof value === 'function' ? value.call(this, value) : value;
+          value = value && value.toArray ? value.toArray()[0] : value instanceof Array ? value[0] : value;
           value = typeof value === 'string' ? (element || document).querySelector(value) : value;
           break;
       }
