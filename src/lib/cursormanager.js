@@ -143,6 +143,13 @@ function CursorManager(options) {
   }
   
   function handleEvent(e) {
+    // Check for access to event's type property
+    try {
+      e.type;
+    } catch (e) {
+      console.warn(e);
+      return;
+    }
     // Update Mouse Position
     switch (e.type) {
       case 'mousedown':
@@ -175,10 +182,12 @@ function CursorManager(options) {
     switch (e.type) {
       case 'click':
         if (!clicking && cursorItem) {
-          //e.stopImmediatePropagation();
-          //e.preventDefault();
-          clicking = true;
-          cursorItem.target.click();
+          if (mouse.element && cursorItem && cursorItem.target && cursorItem.symbol !== mouse.element && isChildOf(cursorItem.container, mouse.element)) {
+            //e.stopImmediatePropagation();
+            //e.preventDefault();
+            clicking = true;
+            cursorItem.target.click();
+          }
         }
         break;
     }
@@ -253,7 +262,8 @@ function CursorManager(options) {
       var symbol = cursorItem.symbol;
       
       var style = {
-        display: 'inline-block'
+        display: 'inline-block',
+        position: 'absolute'
       };
       
       style[transformStyle] = "";
