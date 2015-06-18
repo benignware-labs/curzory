@@ -1,65 +1,9 @@
-function getAncestorsAsArray(element){
-  var arr = new Array();
-  arr.unshift(element);
-  while (arr[0].parentNode){
-    arr.unshift(arr[0].parentNode);
-  }
-  return arr;
-}
 
-function highestInitialZIndex(elementArr){
-  for (var i = 0; i < elementArr.length; i++) {
-      if (elementArr[i].style == undefined) continue;
-      var r = elementArr[i].style.zIndex;
-      if (!isNaN(r) && r!="") {
-          return r;
-      }
-  }
-  return undefined;
-}
-
-function findCommonAncestor(elementArr1, elementArr2){
-  var commonAncestor;
-  for (var i=0; i<elementArr1.length; i++){
-    if (elementArr1[i] == elementArr2[i]) {
-        commonAncestor = elementArr1[i];
-    }
-  }
-  return commonAncestor;
-}
-
-function findHighestAbsoluteIndex(element1, element2){
-  var arr1 = getAncestorsAsArray(element1);
-  var arr2 = getAncestorsAsArray(element2);
-
-  // Does an ancestor of one elment simply have a higher z-index?
-  var arr1Z = highestInitialZIndex(arr1);
-  var arr2Z = highestInitialZIndex(arr2);
-  if (arr1Z > arr2Z || (!isNaN(arr1Z) && isNaN(arr2Z))) return element1;
-  if (arr2Z > arr1Z || (!isNaN(arr2Z) && isNaN(arr1Z))) return element2;
-
-  // Is one element a descendent of the other?
-  var commonAncestor = findCommonAncestor(arr1, arr2);
-  if (commonAncestor == element1) return element2;
-  if (commonAncestor == element2) return element1;
-
-  // OK, which has the oldest common sibling? (Greater index of child node for an element = "older" child)
-  var indexOfCommonAncestor;
-  for (var i=0; i<arr1.length; i++){
-    if (arr1[i] == commonAncestor) {
-      indexOfCommonAncestor = i;
-      break;
-    }
-  }
-
-  for (var j=commonAncestor.childNodes.length; j>=0; j--) {
-    if (arr1[indexOfCommonAncestor+1] == commonAncestor.childNodes[j]) return element1;
-    if (arr2[indexOfCommonAncestor+1] == commonAncestor.childNodes[j]) return element2;
-  }   
-}
 
 var
-
+  
+  topmost = require('./topmost'),
+  
   /**
    * Hyphenate a string
    * @param {String} string
@@ -260,15 +204,21 @@ function CursorManager(options) {
     });
     
     cursorItem = cursorItems.filter(function(cursorItem, index) {
-      var mouseElement = mouse.element, bounds = cursorItem.bounds, container = cursorItem.container, result = false;
-      // Detect if mouse element is contained
-      if (mouseElement && cursorItem.symbol !== mouseElement && (cursorItem.container === mouseElement || isChildOf(cursorItem.container, mouseElement))) {
-        // Match bounds
-        result = (mouse.x >= bounds.x && mouse.x <= bounds.x + bounds.width && mouse.y >= bounds.y && mouse.y <= bounds.y + bounds.height);
+      var mouseElement = mouse.element, symbol = cursorItem.symbol, bounds = cursorItem.bounds, container = cursorItem.container, result = false;
+      // Detect if a mouse element exists and that it's not the symbol itself
+      if (mouseElement && symbol !== mouseElement) {
+        // Detect if symbol is topmost element
+        if (topmost(mouseElement, symbol) === symbol) {
+          // Detect if mouse element is contained
+          if (container === mouseElement || isChildOf(container, mouseElement)) {
+            // Match bounds
+            result = (mouse.x >= bounds.x && mouse.x <= bounds.x + bounds.width && mouse.y >= bounds.y && mouse.y <= bounds.y + bounds.height);
+          }
+        }
       }
       return result;
     }).sort(function(a, b) {
-      var zElement = findHighestAbsoluteIndex(a.symbol, b.symbol);
+      var zElement = topmost(a.symbol, b.symbol);
       if (zElement === a.symbol) {
         return a;
       } else if (zElement === b.symbol) {
@@ -283,7 +233,7 @@ function CursorManager(options) {
     }).reverse()[0];
     
     // Set MouseProviders
-    setMouseProviders([].concat(cursorItems.map(function(item) {
+    setMouseProviders([window].concat(cursorItems.map(function(item) {
       return item.container;
     })));
     //setMouseProviders([window]);

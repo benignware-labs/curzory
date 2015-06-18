@@ -12,26 +12,26 @@
     <script src="jquery.slideview.js"></script>
     <link rel="stylesheet" type="text/css" href="jquery.slideview.css">
       
-    <script src="cursory.js"></script>
+    <script src="dist/jquery.curzory.js"></script>
     
     <script>
     
       
      $(function() {
        
-       $('.slideview-next').curzor({
+       $('.slideview-next').curzory({
          bounds: {
            x: "85%",
-           y: "40px",
+           y: "0",
            width: "15%",
            height: "100%"
          }
        });
        
-       $('.slideview-prev').curzor({
+       $('.slideview-prev').curzory({
          bounds: {
            x: "0",
-           y: "40px",
+           y: "0",
            width: "15%",
            height: "100%"
          }
@@ -76,6 +76,17 @@
         padding: 30px;
       }
       
+      .overlay {
+        width: 200px;
+        height: 120px;
+        background: green;
+        position: absolute;
+        right: 50px;
+        top: 50px;
+        z-index: 1000;
+        color: white;
+      }
+      
     </style>
   </head>
   <body>
@@ -89,6 +100,7 @@
       <!-- Slider main container -->
       <div class="slideview">
           <!-- Additional required wrapper -->
+          <div class="overlay">The cursor should only be active if its symbol is the topmost element</div>
           <div class="slideview-content">
             <!-- Slides -->
             <div class="slide">
