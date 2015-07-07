@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link type="text/css" rel="stylesheet" href="http://cdn.rawgit.com/sindresorhus/github-markdown-css/gh-pages/github-markdown.css">
+    <link type="text/css" rel="stylesheet" href="http://cdn.rawgit.com/richleland/pygments-css/master/github.css">
+    <title>curzory</title>
+    <style>
+    
+      body {
+        font-family: Helvetica, Arial, sans-serif;
+      }
+          
+      .highlight-example:after {
+        color: #959595;
+        content: "Example";
+        font-size: 12px;
+        font-weight: 700;
+        left: 15px;
+        letter-spacing: 1px;
+        position: absolute;
+        text-transform: uppercase;
+        top: 15px;
+      }
+      
+      .highlight-example {
+        border-color: #e5e5e5 #eee #eee;
+        border-style: solid;
+        border-width: 1px 0;
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.05) inset;
+        margin: 0 -15px 15px;
+        padding: 45px 15px 15px;
+        position: relative;
+      }
+      
+      .highlight-example {
+        background-color: #fff;
+        border-color: #ddd;
+        border-radius: 4px 4px 0 0;
+        border-width: 1px;
+        box-shadow: none;
+        margin-left: 0;
+        margin-right: 0;
+      }
+      
+      .highlight-example + .highlight {
+        border-bottom-left-radius: 4px;
+        border-bottom-right-radius: 4px;
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
+        border-width: 1px;
+        margin: -16px 0 15px;
+        border-width: 1px;
+      }
+
+      .highlight {
+        background-color: #f7f7f9;
+        border: 1px solid #e1e1e8;
+        border-radius: 4px;
+        margin-bottom: 14px;
+        padding: 0;
+      }
+
+      .highlight pre {
+        background-color: transparent;
+        border: 0 none;
+        margin-bottom: 0;
+        margin-top: 0;
+        padding: 0;
+      }
+      
+      article.markdown-body {
+        max-width: 728px;
+        margin: 50px auto;
+      }
+      
+      body > footer {
+        border-top: 1px solid #eee;
+        color: #767676;
+        font-size: 12px;
+        line-height: 1.5;
+        margin-top: 40px;
+        padding-bottom: 40px;
+        padding-top: 40px;
+        position: relative;
+        max-width: 728px;
+        margin: 50px auto;
+      }
+      
+      body > footer > * {
+        float: left;
+        line-height: 16px;
+        font-size: 12px;
+      }
+      body > footer > *:last-child {
+        float: right;
+      }
+      
+      body > footer > nav ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+      
+      body > footer > nav ul li {
+        display: inline-block;
+      }
+      
+      body > footer > nav ul li + li {
+        margin-left: 10px;
+      }
+      
+      a {
+        color: #4078c0;
+        text-decoration: none;
+      }
+      
+    </style>
+  </head>
+  <body>
+    
+    <a href="https://github.com/benignware-labs/curzory"><img style="position: fixed; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/e7bbb0521b397edbd5fe43e7f760759336b5e05f/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677265656e5f3030373230302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_green_007200.png"></a>
+    
+    <article class="markdown-body"><h1 id="curzory">curzory</h1>
+<blockquote>
+<p>Advanced cursor control</p>
+</blockquote>
+<p><a href="http://benignware-labs.github.io/curzory">Demo</a></p>
+<h2 id="usage">Usage</h2>
+<p>Include the library</p>
+<div><script src="curzory.js"></script>
+</div>
+
+
+
+<div class="highlight"><pre><span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;curzory.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+</pre></div>
+<p>The following example will create an icon cursor handle on the paragraph and toggle a class on click:</p>
+<p>We&#39;ll be using Glyphicons in this example. So we need to include Bootstrap as well:</p>
+<div><link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"></link>
+</div>
+
+
+
+<div class="highlight"><pre><span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">href=</span><span class="s">&quot;http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css&quot;</span><span class="nt">&gt;&lt;/link&gt;</span>
+</pre></div>
+<h4 id="vanilla-js">Vanilla JS</h4>
+<div class="highlight-example">
+<p class="cursor-pane">Lorem ipsum dolor sit amet</p>
+</div>
+
+
+<div class="highlight"><pre><span class="nt">&lt;p</span> <span class="na">class=</span><span class="s">&quot;cursor-pane&quot;</span><span class="nt">&gt;</span>Lorem ipsum dolor sit amet<span class="nt">&lt;/p&gt;</span>
+</pre></div>
+<style>.cursor-pane.colored,
+.cursor-pane .cursor-symbol {
+  color: red;
+}
+</style>
+
+
+
+<div class="highlight"><pre><span class="nc">.cursor-pane.colored</span><span class="o">,</span>
+<span class="nc">.cursor-pane</span> <span class="nc">.cursor-symbol</span> <span class="p">{</span>
+  <span class="k">color</span><span class="o">:</span> <span class="nb">red</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+<script>var cursorPane = document.querySelector('.cursor-pane');
+curzory(cursorPane, {
+  symbol: '<i class="cursor-symbol glyphicon glyphicon-heart"></i>'
+});
+cursorPane.addEventListener('click', function() {
+  this.classList.toggle('colored');
+});
+</script>
+
+
+
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">cursorPane</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="s1">&#39;.cursor-pane&#39;</span><span class="p">);</span>
+<span class="nx">curzory</span><span class="p">(</span><span class="nx">cursorPane</span><span class="p">,</span> <span class="p">{</span>
+  <span class="nx">symbol</span><span class="o">:</span> <span class="s1">&#39;&lt;i class=&quot;cursor-symbol glyphicon glyphicon-heart&quot;&gt;&lt;/i&gt;&#39;</span>
+<span class="p">});</span>
+<span class="nx">cursorPane</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;click&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">classList</span><span class="p">.</span><span class="nx">toggle</span><span class="p">(</span><span class="s1">&#39;colored&#39;</span><span class="p">);</span>
+<span class="p">});</span>
+</pre></div>
+<h4 id="jquery">jQuery</h4>
+<p>Same example using jquery:</p>
+<div><script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+<script src="jquery.curzory.min.js"></script>
+</div>
+
+
+
+<div class="highlight"><pre><span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;http://code.jquery.com/jquery-1.11.3.min.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+<span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;jquery.curzory.min.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+</pre></div>
+<div class="highlight-example">
+<p class="cursor-pane-jquery">Lorem ipsum dolor sit amet</p>
+</div>
+
+
+<div class="highlight"><pre><span class="nt">&lt;p</span> <span class="na">class=</span><span class="s">&quot;cursor-pane-jquery&quot;</span><span class="nt">&gt;</span>Lorem ipsum dolor sit amet<span class="nt">&lt;/p&gt;</span>
+</pre></div>
+<style>.cursor-pane-jquery.colored,
+.cursor-pane-jquery .cursor-symbol {
+  color: red;
+}
+</style>
+
+
+
+<div class="highlight"><pre><span class="nc">.cursor-pane-jquery.colored</span><span class="o">,</span>
+<span class="nc">.cursor-pane-jquery</span> <span class="nc">.cursor-symbol</span> <span class="p">{</span>
+  <span class="k">color</span><span class="o">:</span> <span class="nb">red</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+<script>$(".cursor-pane-jquery").curzory({
+  symbol: '<i class="cursor-symbol glyphicon glyphicon-heart"></i>'
+}).on('click', function() {
+  $(this).toggleClass('colored');
+});
+</script>
+
+
+
+<div class="highlight"><pre><span class="nx">$</span><span class="p">(</span><span class="s2">&quot;.cursor-pane-jquery&quot;</span><span class="p">).</span><span class="nx">curzory</span><span class="p">({</span>
+  <span class="nx">symbol</span><span class="o">:</span> <span class="s1">&#39;&lt;i class=&quot;cursor-symbol glyphicon glyphicon-heart&quot;&gt;&lt;/i&gt;&#39;</span>
+<span class="p">}).</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;click&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">toggleClass</span><span class="p">(</span><span class="s1">&#39;colored&#39;</span><span class="p">);</span>
+<span class="p">});</span>
+</pre></div>
+<h3 id="enhance-slider-buttons-with-curzory">Enhance slider buttons with curzory</h3>
+<h4 id="swiper">Swiper</h4>
+<div><link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/Swiper/3.0.7/css/swiper.min.css">
+<script src="http://cdnjs.cloudflare.com/ajax/libs/Swiper/3.0.7/js/swiper.min.js"></script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/Swiper/3.0.7/js/swiper.jquery.min.js"></script>
+</div>
+
+
+
+<div class="highlight"><pre><span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">href=</span><span class="s">&quot;http://cdnjs.cloudflare.com/ajax/libs/Swiper/3.0.7/css/swiper.min.css&quot;</span><span class="nt">&gt;</span>
+<span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;http://cdnjs.cloudflare.com/ajax/libs/Swiper/3.0.7/js/swiper.min.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+<span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;http://cdnjs.cloudflare.com/ajax/libs/Swiper/3.0.7/js/swiper.jquery.min.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+</pre></div>
+<div class="highlight-example">
+<div class="swiper-container">
+  <!-- Additional required wrapper -->
+  <div class="swiper-wrapper">
+    <!-- Slides -->
+    <div class="swiper-slide">
+      <div class="slide-content">
+         Slide 1
+      </div>
+    </div>
+    <div class="swiper-slide">
+      <div class="slide-content">
+         Slide 2
+      </div>
+    </div>
+    <div class="swiper-slide">
+      <div class="slide-content">
+         Slide 3
+      </div>
+    </div>
+  </div>
+  <!-- If we need pagination -->
+  <div class="swiper-pagination"></div>
+
+  <!-- If we need navigation buttons -->
+  <div class="swiper-button-prev"></div>
+  <div class="swiper-button-next"></div>
+</div>
+</div>
+
+
+<div class="highlight"><pre><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;swiper-container&quot;</span><span class="nt">&gt;</span>
+  <span class="c">&lt;!-- Additional required wrapper --&gt;</span>
+  <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;swiper-wrapper&quot;</span><span class="nt">&gt;</span>
+    <span class="c">&lt;!-- Slides --&gt;</span>
+    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;swiper-slide&quot;</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;slide-content&quot;</span><span class="nt">&gt;</span>
+         Slide 1
+      <span class="nt">&lt;/div&gt;</span>
+    <span class="nt">&lt;/div&gt;</span>
+    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;swiper-slide&quot;</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;slide-content&quot;</span><span class="nt">&gt;</span>
+         Slide 2
+      <span class="nt">&lt;/div&gt;</span>
+    <span class="nt">&lt;/div&gt;</span>
+    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;swiper-slide&quot;</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;slide-content&quot;</span><span class="nt">&gt;</span>
+         Slide 3
+      <span class="nt">&lt;/div&gt;</span>
+    <span class="nt">&lt;/div&gt;</span>
+  <span class="nt">&lt;/div&gt;</span>
+  <span class="c">&lt;!-- If we need pagination --&gt;</span>
+  <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;swiper-pagination&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+
+  <span class="c">&lt;!-- If we need navigation buttons --&gt;</span>
+  <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;swiper-button-prev&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+  <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;swiper-button-next&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+</pre></div>
+<style>.swiper-container {
+  height: 300px;
+}
+.swiper-slide .slide-content {
+  text-align: center;
+  padding: 30px;
+}
+</style>
+
+
+
+<div class="highlight"><pre><span class="nc">.swiper-container</span> <span class="p">{</span>
+  <span class="k">height</span><span class="o">:</span> <span class="m">300px</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nc">.swiper-slide</span> <span class="nc">.slide-content</span> <span class="p">{</span>
+  <span class="k">text-align</span><span class="o">:</span> <span class="k">center</span><span class="p">;</span>
+  <span class="k">padding</span><span class="o">:</span> <span class="m">30px</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+<script>$(function() {
+   $('.swiper-button-next').curzory({
+     bounds: {
+       x: "85%",
+       y: "0",
+       width: "15%",
+       height: "100%"
+     }
+   });
+   $('.swiper-button-prev').curzory({
+     bounds: {
+       x: "0",
+       y: "0",
+       width: "15%",
+       height: "100%"
+     }
+   });
+   $('.swiper-container').swiper({
+     nextButton: '.swiper-button-next',
+     prevButton: '.swiper-button-prev',
+     pagination: '.swiper-pagination'
+   });
+ });
+</script>
+
+
+
+<div class="highlight"><pre><span class="nx">$</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+   <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;.swiper-button-next&#39;</span><span class="p">).</span><span class="nx">curzory</span><span class="p">({</span>
+     <span class="nx">bounds</span><span class="o">:</span> <span class="p">{</span>
+       <span class="nx">x</span><span class="o">:</span> <span class="s2">&quot;85%&quot;</span><span class="p">,</span>
+       <span class="nx">y</span><span class="o">:</span> <span class="s2">&quot;0&quot;</span><span class="p">,</span>
+       <span class="nx">width</span><span class="o">:</span> <span class="s2">&quot;15%&quot;</span><span class="p">,</span>
+       <span class="nx">height</span><span class="o">:</span> <span class="s2">&quot;100%&quot;</span>
+     <span class="p">}</span>
+   <span class="p">});</span>
+   <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;.swiper-button-prev&#39;</span><span class="p">).</span><span class="nx">curzory</span><span class="p">({</span>
+     <span class="nx">bounds</span><span class="o">:</span> <span class="p">{</span>
+       <span class="nx">x</span><span class="o">:</span> <span class="s2">&quot;0&quot;</span><span class="p">,</span>
+       <span class="nx">y</span><span class="o">:</span> <span class="s2">&quot;0&quot;</span><span class="p">,</span>
+       <span class="nx">width</span><span class="o">:</span> <span class="s2">&quot;15%&quot;</span><span class="p">,</span>
+       <span class="nx">height</span><span class="o">:</span> <span class="s2">&quot;100%&quot;</span>
+     <span class="p">}</span>
+   <span class="p">});</span>
+   <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;.swiper-container&#39;</span><span class="p">).</span><span class="nx">swiper</span><span class="p">({</span>
+     <span class="nx">nextButton</span><span class="o">:</span> <span class="s1">&#39;.swiper-button-next&#39;</span><span class="p">,</span>
+     <span class="nx">prevButton</span><span class="o">:</span> <span class="s1">&#39;.swiper-button-prev&#39;</span><span class="p">,</span>
+     <span class="nx">pagination</span><span class="o">:</span> <span class="s1">&#39;.swiper-pagination&#39;</span>
+   <span class="p">});</span>
+ <span class="p">});</span>
+</pre></div>
+<h2 id="options">Options</h2>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>bounds</td>
+      <td>Specify a selector, an element, a rect containing x-, y-, width- and height-properties relative to the offset-parent of the element or a function returning a rect used as a bounding box for cursor activity</td>
+    </tr>
+    <tr>
+      <td>offset</td>
+      <td>A point object containing x- and y-properties specifying the position of the cursor handle relative to the mouse pointer.</td>
+    </tr>
+    <tr>
+      <td>symbol</td>
+      <td>A selector, an element or a portion of markup specifying the cursor handle. Defaults to the element itself.</td> 
+    </tr>
+    <tr>
+      <td>target</td>
+      <td>The click target. Defaults to the element itself</td>
+    </tr>
+  </tbody>
+</table></article>
+    <footer>
+      <div class="disclaimer">
+        
+           &copy; 2015
+          
+            <a href="https://github.com/benignware">
+          
+            Benignware
+          
+            </a>
+          
+        
+      </div>
+      <nav>
+        <ul>
+          
+            <li>v0.0.1</li>
+          
+          
+            <li><a href="https://github.com/benignware-labs/curzory/archive/v0.0.1.zip">Download</a></li>
+          
+          
+            <li><a href="https://github.com/benignware-labs/curzory/issues">Bugs</a></li>
+          
+        </ul>
+      </nav>
+      
+    </footer>
+  </body>
+</html>
