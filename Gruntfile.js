@@ -27,6 +27,9 @@ module.exports = function(grunt) {
         cwd: 'dist',
         src: ['**/*'],
         dest: 'samples/dist/'
+      },
+      site: {
+        expand: true, cwd: 'dist/', src: ['**/*'], dest: 'site/'
       }
     },
     browserify: {
@@ -71,6 +74,30 @@ module.exports = function(grunt) {
           index: 'index.html'
         }
       }
+    },
+    livemd: {
+      options: {
+        prefilter: function(string) {
+          return string.replace(grunt.config().pkg && grunt.config().pkg.homepage && new RegExp("\\[.*\\]\\(" + grunt.config().pkg.homepage.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&") + "\\)", "gi"), "");
+        }
+      },
+      site: {
+        files: {
+          'site/index.html': ['README.md']
+        }
+      }
+    },
+    'gh-pages': {
+      options: {
+        // Options for all targets go here.
+      },
+      site: {
+        options: {
+          base: 'site'
+        },
+        // These files will get pushed to the `gh-pages` branch (the default).
+        src: ['**/*']
+      }
     }
   });
 
@@ -80,11 +107,15 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-connect');
   grunt.loadNpmTasks('grunt-browserify');
+  grunt.loadNpmTasks("grunt-livemd");
+  grunt.loadNpmTasks("grunt-gh-pages");
 
   grunt.registerTask('default', ['jshint']);
   
   grunt.registerTask('build', ['browserify:curzory', 'browserify:jqueryCurzory', 'uglify:dist', 'copy:samples']);
   
   grunt.registerTask('serve', ['build', 'connect:samples', 'watch']);
+  
+  grunt.registerTask('site', ['build', 'copy:site', 'livemd:site']);
 
 };
