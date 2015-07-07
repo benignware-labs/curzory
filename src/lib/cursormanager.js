@@ -75,8 +75,8 @@ var
     return elem.style[name] || window.getComputedStyle(elem, null).getPropertyValue(name);
   },
   
-  offset = function(element) {
-    var scrollOffset = scrollOffset();
+  getOffset = function(element) {
+    var scrollOffset = getScrollOffset();
     var rect = element.getBoundingClientRect(), bodyElement = document.body;
     return {
       top: rect.top + scrollOffset.top,
@@ -269,9 +269,9 @@ function CursorManager(options) {
       style[transformStyle] = "";
       style[transformStyle + "Origin"] = '';
       
-      $(symbol).css(style);
+      css(symbol, style);
       
-      var pos = $(symbol).offset();
+      var pos = getOffset(symbol);
       
       var px = pos.left;
       var py = pos.top;
@@ -292,7 +292,7 @@ function CursorManager(options) {
         style.top = y + pos.top;
       }
       
-      $(symbol).css(style);
+      css(symbol, style);
     }
   };
   
@@ -315,7 +315,7 @@ function CursorManager(options) {
   
   var mouseProviders = [];
   function setMouseProviders(elements) {
-    elements = $.grep(elements, function(n) { return (n); });
+    elements = elements.filter(function(n) { return (n); });
     mouseProviders.forEach(function(element) {
       if (elements.indexOf(element) === -1) {
         removeMouseListeners(element);
@@ -381,7 +381,7 @@ function getCursorItem(cursor) {
     // Object bounds
     container = symbol.offsetParent;
     var rect = getBoundingRect(container);
-    var containerPos = $(container).offset() || {x: 0, y: 0};
+    var containerPos = getOffset(container) || {x: 0, y: 0};
     // Process function 
     if (typeof bounds === 'function') {
       bounds = bounds(container);
