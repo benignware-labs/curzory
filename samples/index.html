@@ -13,7 +13,7 @@
        $(".cursor-pane").curzory({
          symbol: '<i class="cursor-symbol glyphicon glyphicon-heart"></i>'
        }).on('click', function() {
-         $(this).toggleClass('red');
+         $(this).toggleClass('colored');
        });
        
      });
@@ -27,12 +27,8 @@
         padding: 0
       }
       
-      .cursor-pane .cursor-symbol {
-        color: red;
-        font-size: 16px;
-      }
-      
-      .cursor-pane.red {
+      .cursor-pane .cursor-symbol,
+      .cursor-pane.colored {
         color: red;
       }
       
