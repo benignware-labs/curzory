@@ -1,5 +1,3 @@
-
-
 var
   
   topmost = require('./topmost'),
@@ -139,7 +137,9 @@ function CursorManager(options) {
   var clickable = true;
   
   function init() {
-    addMouseListeners(window);
+    if (!('ontouch' in window)) {
+      addMouseListeners(window);
+    }
   }
   
   function handleEvent(e) {
