@@ -1,7 +1,6 @@
 # curzory
 > Advanced cursor control
 
-
 [Demo](http://benignware-labs.github.io/curzory)
 
 ## Usage

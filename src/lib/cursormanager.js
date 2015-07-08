@@ -103,8 +103,8 @@ var
     var scrollOffset = getScrollOffset();
     var rect = element.getBoundingClientRect();
     return {
-      x: rect.x + scrollOffset.left,
-      y: rect.y + scrollOffset.top,
+      x: rect.left + scrollOffset.left,
+      y: rect.top + scrollOffset.top,
       width: rect.width,
       height: rect.height
     };
@@ -241,6 +241,8 @@ function CursorManager(options) {
       return d1 < d2 ? d1 : d1 > d2 ? d2 : 0;
     }).reverse()[0];
     
+    
+    
     // Set MouseProviders
     setMouseProviders([window].concat(cursorItems.map(function(item) {
       return item.container;
@@ -370,7 +372,6 @@ function getCursorItem(cursor) {
     element.appendChild(symbol);
   }
   
-  
   // Get bounds
   var container;
   if (bounds && bounds.getBoundingClientRect) {
@@ -379,8 +380,9 @@ function getCursorItem(cursor) {
     bounds = getBoundingRect(bounds);
   } else {
     // Object bounds
-    container = symbol.offsetParent;
+    container = symbol.offsetParent || element;
     var rect = getBoundingRect(container);
+    
     var containerPos = getOffset(container) || {x: 0, y: 0};
     // Process function 
     if (typeof bounds === 'function') {
