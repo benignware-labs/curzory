@@ -290,8 +290,8 @@ function CursorManager(options) {
         style[transformStyle + "Origin"] = '0 0';
         style[transformStyle] = "translate3d(" + x + "px," + y + "px, 0) scale(" + cursorItem.scale + "," + cursorItem.scale + ")";
       } else {
-        style.left = x + pos.left;
-        style.top = y + pos.top;
+        style.left = (x + pos.left) + "px";
+        style.top = (y + pos.top) + "px";
       }
       
       css(symbol, style);
