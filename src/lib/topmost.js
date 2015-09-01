@@ -20,10 +20,15 @@ function getAncestorsAsArray(element){
 
 function highestInitialZIndex(elementArr){
   for (var i = 0; i < elementArr.length; i++) {
-    if (elementArr[i].style == undefined) continue;
-    var r = getStyle(elementArr[i], 'zIndex');
-    if (!isNaN(r) && r!="") {
-        return r;
+    var elem = elementArr[i];
+    if (elem.style !== undefined) {
+      var p = getStyle(elem, 'position');
+      if (p !== 'static') {
+        var r = getStyle(elem, 'zIndex');
+        if (!isNaN(r) && r !== "" && r !== "auto") {
+          return r;
+        }
+      }
     }
   }
   return undefined;
