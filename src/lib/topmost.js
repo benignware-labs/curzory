@@ -1,79 +1,109 @@
 var 
 
   getStyle = function(el, cssprop){
-    if (el.currentStyle) //IE
-      return el.currentStyle[cssprop];
-    else if (document.defaultView && document.defaultView.getComputedStyle) //Firefox
-      return document.defaultView.getComputedStyle(el, "")[cssprop];
-    else //try and get inline style
-      return el.style[cssprop];
-  };
-
-function getAncestorsAsArray(element){
-  var arr = new Array();
-  arr.unshift(element);
-  while (arr[0].parentNode){
-    arr.unshift(arr[0].parentNode);
-  }
-  return arr;
-}
-
-function highestInitialZIndex(elementArr){
-  for (var i = 0; i < elementArr.length; i++) {
-    var elem = elementArr[i];
-    if (elem.style !== undefined) {
-      var p = getStyle(elem, 'position');
-      if (p !== 'static') {
-        var r = getStyle(elem, 'zIndex');
-        if (!isNaN(r) && r !== "" && r !== "auto") {
-          return r;
-        }
+    if (el.style)
+      if (el.currentStyle) //IE
+        return el.currentStyle[cssprop];
+      else if (document.defaultView && document.defaultView.getComputedStyle) //Firefox
+        return document.defaultView.getComputedStyle(el, "")[cssprop];
+      else //try and get inline style
+        return el.style[cssprop];
+  },
+  
+  getZIndex = function(el) {
+    var zIndex = parseFloat(getStyle(el, 'zIndex'));
+    zIndex = !isNaN(zIndex) ? zIndex : 0;
+    if (zIndex === 0) {
+      if (el.parentNode) {
+        return getZIndex(el.parentNode);
       }
     }
+    return zIndex;
+  },
+  
+  isChildOf = function(parent, child) {
+   if (!child || !parent) {
+     return false;
+   }
+   var node = child.parentNode;
+   while (node != null) {
+     if (node == parent) {
+         return true;
+     }
+     node = node.parentNode;
+   }
+   return false;
+  };
+
+// Compare Z-Index, returns -1, 1 or 0
+function comparePositionStack(a, b) {
+  var pa = getStyle(a, 'position');
+  var pb = getStyle(b, 'position');
+  if (za > zb) {
+    return -1;
+  } else if (zb > za) {
+    return 1;
   }
-  return undefined;
+  return 0;
 }
 
-function findCommonAncestor(elementArr1, elementArr2){
-  var commonAncestor;
-  for (var i=0; i<elementArr1.length; i++){
-    if (elementArr1[i] == elementArr2[i]) {
-        commonAncestor = elementArr1[i];
-    }
+// Compare Z-Index, returns -1, 1 or 0
+function compareZIndex(a, b) {
+  var za = getZIndex(a);
+  var zb = getZIndex(b);
+  if (za > zb) {
+    return -1;
+  } else if (zb > za) {
+    return 1;
   }
-  return commonAncestor;
+  return 0;
 }
 
-function findHighestAbsoluteIndex(element1, element2){
-  var arr1 = getAncestorsAsArray(element1);
-  var arr2 = getAncestorsAsArray(element2);
-
-  // Does an ancestor of one elment simply have a higher z-index?
-  var arr1Z = highestInitialZIndex(arr1);
-  var arr2Z = highestInitialZIndex(arr2);
-  if (arr1Z > arr2Z || (!isNaN(arr1Z) && isNaN(arr2Z))) return element1;
-  if (arr2Z > arr1Z || (!isNaN(arr2Z) && isNaN(arr1Z))) return element2;
-
-  // Is one element a descendent of the other?
-  var commonAncestor = findCommonAncestor(arr1, arr2);
-  if (!commonAncestor) {
-    return element1;
-  }
-  if (commonAncestor == element1) return element2;
-  if (commonAncestor == element2) return element1;
-
-  // OK, which has the oldest common sibling? (Greater index of child node for an element = "older" child)
-  var indexOfCommonAncestor;
-  for (var i=0; i<arr1.length; i++){
-    if (arr1[i] == commonAncestor) {
-      indexOfCommonAncestor = i;
-      break;
-    }
-  }
-
-  for (var j=commonAncestor.childNodes.length; j>=0; j--) {
-    if (arr1[indexOfCommonAncestor+1] == commonAncestor.childNodes[j]) return element1;
-    if (arr2[indexOfCommonAncestor+1] == commonAncestor.childNodes[j]) return element2;
-  }   
+// Compare Position - MIT Licensed, John Resig
+function comparePosition(a, b){
+  return a.compareDocumentPosition ?
+    a.compareDocumentPosition(b) :
+    a.contains ?
+      (a != b && a.contains(b) && 16) +
+        (a != b && b.contains(a) && 8) +
+        (a.sourceIndex >= 0 && b.sourceIndex >= 0 ?
+          (a.sourceIndex < b.sourceIndex && 4) +
+            (a.sourceIndex > b.sourceIndex && 2) :
+          1) +
+      0 :
+      0;
 }
-module.exports = findHighestAbsoluteIndex;
+
+module.exports = function(a, b) {
+  
+  // Compare parent/child relation
+  if (isChildOf(a, b)) {
+    // if b is contained in a, it's always on top
+    return b;
+  }
+  
+  // Compare Z-Index Stack
+  var zIndexComparisonResult = compareZIndex(a, b);
+  if (zIndexComparisonResult === -1) {
+    // a is on top
+    return a;
+  }
+  if (zIndexComparisonResult === 1) {
+    // b is on top
+    return b;
+  }
+  // TODO: Compare Ancestor Position Stack
+  
+  // Compare Document Position
+  var documentPositionResult = comparePosition(a, b);
+  if (documentPositionResult === 2) {
+    // a is preceding
+    return a;
+  }
+  if (documentPositionResult === 4) {
+    // b is following
+    return b;
+  }
+  
+  return a;
+};
