@@ -36,10 +36,10 @@ We'll be using Glyphicons in this example. So we need to include Bootstrap as we
 ```js
 var cursorPane = document.querySelector('.cursor-pane');
 curzory(cursorPane, {
-  symbol: '<i class="cursor-symbol glyphicon glyphicon-heart"></i>'
-});
-cursorPane.addEventListener('click', function() {
-  this.classList.toggle('colored');
+  symbol: '<i class="cursor-symbol glyphicon glyphicon-heart"></i>',
+  click: function() {
+    this.classList.toggle('colored');
+  }
 });
 ```
 
@@ -65,9 +65,10 @@ Same example using jquery:
 
 ```js
 $(".cursor-pane-jquery").curzory({
-  symbol: '<i class="cursor-symbol glyphicon glyphicon-heart"></i>'
-}).on('click', function() {
-  $(this).toggleClass('colored');
+  symbol: '<i class="cursor-symbol glyphicon glyphicon-heart"></i>',
+  click: function() {
+    this.classList.toggle('colored');
+  }
 });
 ```
 
@@ -161,6 +162,10 @@ $(function() {
     <tr>
       <td>bounds</td>
       <td>Specify a selector, an element, a rect containing x-, y-, width- and height-properties relative to the offset-parent of the element or a function returning a rect used as a bounding box for cursor activity</td>
+    </tr>
+    <tr>
+      <td>click</td>
+      <td>Specify a callback which is executed on cursor click</td>
     </tr>
     <tr>
       <td>offset</td>
