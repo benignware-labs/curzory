@@ -1,5 +1,6 @@
 var
   
+  merge = require('./merge'),
   topmost = require('./topmost'),
   
   /**
@@ -76,8 +77,9 @@ var
   },
   
   getOffset = function(element) {
-    var scrollOffset = getScrollOffset();
-    var rect = element.getBoundingClientRect(), bodyElement = document.body;
+    var
+      scrollOffset = getScrollOffset(),
+      rect = element.getBoundingClientRect();
     return {
       top: rect.top + scrollOffset.top,
       left: rect.left + scrollOffset.left
@@ -86,8 +88,8 @@ var
   
   getScrollOffset = function() {
     return {
-      left: document.body.scrollLeft + document.documentElement.scrollLeft,
-      top: document.body.scrollTop + document.documentElement.scrollTop
+      left: document.body && document.body.scrollLeft + document.documentElement.scrollLeft,
+      top: document.body && document.body.scrollTop + document.documentElement.scrollTop
     };
   },
   
@@ -143,11 +145,12 @@ function CursorManager(options) {
   }
   
   function handleEvent(e) {
+    
     // Check for access to event's type property
     try {
       e.type;
     } catch (e) {
-      //console.warn(e);
+      console.warn(e);
       return;
     }
     // Update Mouse Position
@@ -173,6 +176,8 @@ function CursorManager(options) {
       mouse.x = client.x + scrollOffset.left;
       mouse.y = client.y + scrollOffset.top;
       mouse.element = e.target;
+      
+      
     }
     
     // Get Cursor Props
@@ -182,29 +187,23 @@ function CursorManager(options) {
     switch (e.type) {
       case 'click':
         if (!clicking && cursorItem) {
+          clicking = true;
           if (mouse.element && cursorItem && cursorItem.target && cursorItem.symbol !== mouse.element && isChildOf(cursorItem.container, mouse.element)) {
             //e.stopImmediatePropagation();
             //e.preventDefault();
-            clicking = true;
             cursorItem.target.click();
           }
+          var click = cursorItem && cursorItem.click;
+          if (typeof click === 'function') {
+            click.call(cursorItem.element, e);
+          }
         }
+        //e.stopPropagation();
         break;
     }
     // Update cursors
     render.call(instance);
   }
-  
-  function isClickable(cursorItem) {
-    var element = mouse.element;
-    if (element) {
-      if (cursorItem && cursorItem.target && cursorItem.symbol !== element && isChildOf(cursorItem.container, element)) {
-        //if (!opts.hideOnFocus || !isChildOf(element, document.activeElement) && element !== document.activeElement) {
-        return true;
-      }
-    }
-    return false;
-  } 
   
   function invalidate() {
     
@@ -215,7 +214,7 @@ function CursorManager(options) {
     cursorItem = cursorItems.filter(function(cursorItem, index) {
       var mouseElement = mouse.element, symbol = cursorItem.symbol, bounds = cursorItem.bounds, container = cursorItem.container, result = false;
       // Detect if a mouse element exists and that it's not the symbol itself
-      if (mouseElement && symbol !== mouseElement) {
+      if (mouseElement) {
         // Detect if symbol is topmost element
         if (topmost(mouseElement, symbol) === symbol) {
           // Detect if mouse element is contained
@@ -233,14 +232,12 @@ function CursorManager(options) {
       } else if (zElement === b.symbol) {
         return b;
       }
-      
       var p1 = {x: a.x + a.width / 2, y: a.y + a.height / 2};
       var p2 = {x: b.x + b.width / 2, y: b.y + b.height / 2};
       var d1 = Math.sqrt( Math.pow((p1.x - mouse.x), 2) + Math.pow((p1.y - mouse.y), 2) );
       var d2 = Math.sqrt( Math.pow((p2.x - mouse.x), 2) + Math.pow((p2.y - mouse.y), 2) );
       return d1 < d2 ? d1 : d1 > d2 ? d2 : 0;
     }).reverse()[0];
-    
     
     
     // Set MouseProviders
@@ -253,49 +250,61 @@ function CursorManager(options) {
   function render() {
 
     cursorItems.forEach(function(item) {
-      if (item !== cursorItem) {
-        css(item.symbol, {
-          display: 'none'
-        });
-      }
-    });
-    
-    if (cursorItem) {
-      var symbol = cursorItem.symbol;
       
-      var style = {
-        display: 'inline-block',
-        position: 'absolute'
-      };
-      
-      style[transformStyle] = "";
-      style[transformStyle + "Origin"] = '';
-      
-      css(symbol, style);
-      
-      var pos = getOffset(symbol);
-      
-      var px = pos.left;
-      var py = pos.top;
-      
-      var off = cursorItem.offset;
-      var x = Math.round((mouse.x - px) + off.left);
-      var y = Math.round((mouse.y - py) + off.top);
-      
-      style = {
-        //border: '1px solid blue'
-      };
-      
-      if (cursorItem.style === 'transform' && transformStyle) {
-        style[transformStyle + "Origin"] = '0 0';
-        style[transformStyle] = "translate3d(" + x + "px," + y + "px, 0) scale(" + cursorItem.scale + "," + cursorItem.scale + ")";
+      var
+        symbol = item.symbol,
+        style = {
+          visibility: item === cursorItem ? '' : 'hidden',
+          position: 'absolute',
+          cursor: 'inherit'
+        };
+        
+      if (item.style === 'transform' && transformStyle) {
+        style[transformStyle + "Origin"] = '';
+        style[transformStyle] = "";
       } else {
-        style.left = (x + pos.left) + "px";
-        style.top = (y + pos.top) + "px";
+        style.left = "";
+        style.top = "";
       }
       
+      symbol.classList && !symbol.classList.contains("cursor") && symbol.classList.add("cursor");
       css(symbol, style);
-    }
+      
+      if (cursorItem === item) {
+        
+        var pos = getOffset(symbol);
+        
+        var px = pos.left;
+        var py = pos.top;
+        
+        var off = item.offset;
+        var x = Math.round((mouse.x - px) + off.left);
+        var y = Math.round((mouse.y - py) + off.top);
+        
+        style = {
+        };
+        
+        if (item.style === 'transform' && transformStyle) {
+          style[transformStyle + "Origin"] = '0 0';
+          style[transformStyle] = "translate3d(" + x + "px," + y + "px, 0) scale(" + item.scale + "," + item.scale + ")";
+        } else {
+          style.left = (x + pos.left) + "px";
+          style.top = (y + pos.top) + "px";
+        }
+        
+        css(symbol, style);
+      }
+      
+      
+      if (item === cursorItem) {
+        symbol.classList && !symbol.classList.contains("cursor-active") && symbol.classList.add("cursor-active");
+        symbol.classList && symbol.classList.contains("cursor-hidden") && symbol.classList.remove("cursor-hidden");
+      } else {
+        symbol.classList && symbol.classList.contains("cursor-active") && symbol.classList.remove("cursor-active");
+        symbol.classList && !symbol.classList.contains("cursor-hidden") && symbol.classList.add("cursor-hidden");
+      }
+      
+    });
   };
   
   this.update = function() {
@@ -403,7 +412,7 @@ function getCursorItem(cursor) {
   
   var target = props.target || symbol.nodeName.toLowerCase() === 'a' ? symbol : element;
   
-  return {
+  return merge(props, {
     cursor: cursor,
     symbol: symbol,
     bounds: bounds,
@@ -412,7 +421,7 @@ function getCursorItem(cursor) {
     offset: offset,
     style: style,
     scale: scale
-  };
+  });
 }
 
 module.exports = CursorManager;

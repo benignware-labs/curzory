@@ -1,19 +1,6 @@
 var
-  merge = function() {
-    var obj = {},
-      i = 0,
-      il = arguments.length,
-      key;
-    for (; i < il; i++) {
-      for (key in arguments[i]) {
-        if (arguments[i].hasOwnProperty(key)) {
-            obj[key] = arguments[i][key];
-        }
-      }
-    }
-    return obj;
-  },
-
+  merge = require('./merge'),
+  
   createElement = function(string) {
     var element = document.createElement('div');
     element.innerHTML = string;
@@ -28,13 +15,10 @@ var
   
 
   getElement = function(value, parent) {
-  
     value = value.toArray ? value.toArray()[0] : value instanceof Array ? value[0] : value;
-    
     if (typeof value === 'function') {
       value = value.call(this, value);
     }
-    
     if (typeof value === 'string') {
       if (isHTML(value)) {
         value = createElement(value);
@@ -42,11 +26,9 @@ var
         value = parent.querySelector(value);
       }
     }
-    
     if (value && value.nodeName) {
       return value;
     }
-    
     return null;
   };
 
