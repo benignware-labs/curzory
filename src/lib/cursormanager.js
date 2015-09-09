@@ -211,33 +211,37 @@ function CursorManager(options) {
       return getCursorItem(cursor, cursorItems[index]);
     });
     
-    cursorItem = cursorItems.filter(function(cursorItem, index) {
-      var mouseElement = mouse.element, symbol = cursorItem.symbol, bounds = cursorItem.bounds, container = cursorItem.container, result = false;
-      // Detect if a mouse element exists and that it's not the symbol itself
-      if (mouseElement) {
-        // Detect if symbol is topmost element
-        if (topmost(mouseElement, symbol) === symbol) {
-          // Detect if mouse element is contained
-          if (container === mouseElement || isChildOf(container, mouseElement)) {
-            // Match bounds
-            result = (mouse.x >= bounds.x && mouse.x <= bounds.x + bounds.width && mouse.y >= bounds.y && mouse.y <= bounds.y + bounds.height);
+    var
+      filtered = cursorItems.filter(function(cursorItem, index) {
+        var mouseElement = mouse.element, symbol = cursorItem.symbol, bounds = cursorItem.bounds, container = cursorItem.container, result = false;
+        // Detect if a mouse element exists and that it's not the symbol itself
+        if (mouseElement) {
+          // Detect if symbol is topmost element
+          if (topmost(mouseElement, symbol) === symbol) {
+            // Detect if mouse element is contained
+            if (container === mouseElement || isChildOf(container, mouseElement)) {
+              // Match bounds
+              result = (mouse.x >= bounds.x && mouse.x <= bounds.x + bounds.width && mouse.y >= bounds.y && mouse.y <= bounds.y + bounds.height);
+            }
           }
         }
-      }
-      return result;
-    }).sort(function(a, b) {
-      var zElement = topmost(a.symbol, b.symbol);
-      if (zElement === a.symbol) {
-        return a;
-      } else if (zElement === b.symbol) {
-        return b;
-      }
-      var p1 = {x: a.x + a.width / 2, y: a.y + a.height / 2};
-      var p2 = {x: b.x + b.width / 2, y: b.y + b.height / 2};
-      var d1 = Math.sqrt( Math.pow((p1.x - mouse.x), 2) + Math.pow((p1.y - mouse.y), 2) );
-      var d2 = Math.sqrt( Math.pow((p2.x - mouse.x), 2) + Math.pow((p2.y - mouse.y), 2) );
-      return d1 < d2 ? d1 : d1 > d2 ? d2 : 0;
-    }).reverse()[0];
+        return result;
+      }),
+      sorted = filtered.sort(function(a, b) {
+        var zElement = topmost(a.symbol, b.symbol);
+        if (zElement === a.symbol) {
+          return -1;
+        } else if (zElement === b.symbol) {
+          return 1;
+        }
+        var p1 = {x: a.x + a.width / 2, y: a.y + a.height / 2};
+        var p2 = {x: b.x + b.width / 2, y: b.y + b.height / 2};
+        var d1 = Math.sqrt( Math.pow((p1.x - mouse.x), 2) + Math.pow((p1.y - mouse.y), 2) );
+        var d2 = Math.sqrt( Math.pow((p2.x - mouse.x), 2) + Math.pow((p2.y - mouse.y), 2) );
+        return d1 < d2 ? d1 : d1 > d2 ? d2 : 0;
+      }).reverse();
+    
+    cursorItem = sorted[0];
     
     
     // Set MouseProviders
