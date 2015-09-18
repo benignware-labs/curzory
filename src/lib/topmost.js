@@ -35,6 +35,19 @@ var
    return false;
   };
 
+
+// Compare Visibility, returns -1, 1 or 0
+function compareVisibility(a, b) {
+  var pa = a && a.style.display;
+  var pb = b && b.style.display;
+  if (pa && !pb) {
+    return -1;
+  } else if (pb && !pa) {
+    return 1;
+  }
+  return 0;
+}
+
 // Compare Z-Index, returns -1, 1 or 0
 function comparePositionStack(a, b) {
   var pa = getStyle(a, 'position');
@@ -46,6 +59,7 @@ function comparePositionStack(a, b) {
   }
   return 0;
 }
+
 
 // Compare Z-Index, returns -1, 1 or 0
 function compareZIndex(a, b) {
@@ -75,6 +89,12 @@ function comparePosition(a, b){
 }
 
 module.exports = function(a, b) {
+  
+  // Compare Visibility
+  var visibility = compareVisibility(a, b);
+  if (visibility !== 0) {
+    return visibility < 0 ? a : b;
+  } 
   
   // Compare parent/child relation
   if (isChildOf(a, b)) {

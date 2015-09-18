@@ -366,12 +366,22 @@ function getCursorItem(cursor) {
   
   var
     element = cursor.get('element'),
-    props, symbol, bounds, container, offset, style, scale;
+    props = cursor.get(), 
+    symbol = props.symbol, 
+    bounds = props.bounds,
+    offset = props.offset,
+    style = props.style,
+    scale = props.scale,
+    target = props.target || symbol.nodeName.toLowerCase() === 'a' ? symbol : element,
+    container,
+    display = element.style.display;
     
+  // Force visibility to get things measured
   css(element, {
     display: ''
   });
   
+  // 
   props = cursor.get();
   
   symbol = props.symbol;
@@ -379,14 +389,14 @@ function getCursorItem(cursor) {
   offset = props.offset;
   style = props.style;
   scale = props.scale;
+  target = props.target || symbol.nodeName.toLowerCase() === 'a' ? symbol : element;
   
   // Add cursor symbol to dom
   if (!symbol.parentNode) {
     element.appendChild(symbol);
   }
   
-  // Get bounds
-  var container;
+  // Get bounds and container
   if (bounds && bounds.getBoundingClientRect) {
     // Element bounds
     container = bounds;
@@ -397,7 +407,7 @@ function getCursorItem(cursor) {
     var rect = getBoundingRect(container);
     
     var containerPos = getOffset(container) || {x: 0, y: 0};
-    // Process function 
+    // Process custom function 
     if (typeof bounds === 'function') {
       bounds = bounds(container);
     }
@@ -414,7 +424,8 @@ function getCursorItem(cursor) {
     };
   }
   
-  var target = props.target || symbol.nodeName.toLowerCase() === 'a' ? symbol : element;
+  // Reset visibility
+  css(element, 'display', display);
   
   return merge(props, {
     cursor: cursor,
