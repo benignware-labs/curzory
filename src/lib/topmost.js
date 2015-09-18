@@ -38,8 +38,8 @@ var
 
 // Compare Visibility, returns -1, 1 or 0
 function compareVisibility(a, b) {
-  var va = a && a.style && a.style.display;
-  var vb = b && b.style && b.style.display;
+  var va = a && a.style && getStyle(a, 'display') !== 'none';
+  var vb = b && b.style && getStyle(b, 'display') !== 'none';
   if (va && !vb) {
     return -1;
   } else if (vb && !va) {
