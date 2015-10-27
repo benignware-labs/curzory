@@ -46,6 +46,7 @@ module.exports = function(grunt) {
       },
       jqueryCurzory: {
         options: {
+          transform: ['browserify-optional'],
           browserifyOptions: {
             debug: true
           }

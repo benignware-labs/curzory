@@ -1,8 +1,14 @@
 var
   curzory = require('./curzory'),
-  $;
-  
-if ($ = jQuery) {
+  $ = (function($) {
+    try {
+      return require('jquery');
+    } catch (e) {
+      return $; 
+    }
+  })(jQuery);
+
+if ($) {
   $.fn.extend({
     curzory: function(options) {
       return this.each(function() {
