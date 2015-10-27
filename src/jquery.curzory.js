@@ -1,12 +1,12 @@
 var
   curzory = require('./curzory'),
-  $ = (function($) {
+  $ = (function() {
     try {
       return require('jquery');
     } catch (e) {
-      return $; 
+      return $ || jQuery; 
     }
-  })(jQuery);
+  })();
 
 if ($) {
   $.fn.extend({
