@@ -205,6 +205,14 @@ function CursorManager(options) {
     render.call(instance);
   }
   
+  function getParents(element, selector) {
+    var parents = [];
+    var parent = element;
+    while (parent = parent.parentElement.closest(selector))
+      parents.push(parent);
+    return parents;
+  }
+  
   function invalidate() {
     
     cursorItems = cursors.map(function(cursor, index) {
@@ -216,12 +224,15 @@ function CursorManager(options) {
         var mouseElement = mouse.element, symbol = cursorItem.symbol, bounds = cursorItem.bounds, container = cursorItem.container, result = false;
         // Detect if a mouse element exists and that it's not the symbol itself
         if (mouseElement) {
-          // Detect if symbol is topmost element
-          if (topmost(mouseElement, symbol) === symbol) {
-            // Detect if mouse element is contained
-            if (container === mouseElement || isChildOf(container, mouseElement)) {
-              // Match bounds
-              result = (mouse.x >= bounds.x && mouse.x <= bounds.x + bounds.width && mouse.y >= bounds.y && mouse.y <= bounds.y + bounds.height);
+          // Check if mouse element is not contained in a link
+          if (getParents(mouseElement, 'a').length === 0) { 
+            // Detect if symbol is topmost element
+            if (topmost(mouseElement, symbol) === symbol) {
+              // Detect if mouse element is contained
+              if (container === mouseElement || isChildOf(container, mouseElement)) {
+                // Match bounds
+                result = (mouse.x >= bounds.x && mouse.x <= bounds.x + bounds.width && mouse.y >= bounds.y && mouse.y <= bounds.y + bounds.height);
+              }
             }
           }
         }
