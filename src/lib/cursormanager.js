@@ -205,10 +205,38 @@ function CursorManager(options) {
     render.call(instance);
   }
   
+  // http://stackoverflow.com/questions/18663941/finding-closest-element-without-jquery
+  // Fix IE
+  function closest(el, selector) {
+    var matchesFn;
+
+    // find vendor prefix
+    ['matches','webkitMatchesSelector','mozMatchesSelector','msMatchesSelector','oMatchesSelector'].some(function(fn) {
+        if (typeof document.body[fn] == 'function') {
+            matchesFn = fn;
+            return true;
+        }
+        return false;
+    });
+
+    var parent;
+
+    // traverse parents
+    while (el) {
+        parent = el.parentElement;
+        if (parent && parent[matchesFn](selector)) {
+            return parent;
+        }
+        el = parent;
+    }
+
+    return null;
+  }
+  
   function getParents(element, selector) {
     var parents = [];
     var parent = element;
-    while (parent = parent.parentElement && parent.parentElement.closest(selector)) {
+    while (parent = parent.parentElement && closest(parent.parentElement, selector)) {
       parents.push(parent);
     }
     return parents;
