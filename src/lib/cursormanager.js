@@ -414,8 +414,9 @@ function getCursorItem(cursor) {
     container = bounds;
     bounds = getBoundingRect(bounds);
   } else {
-    // Object bounds
-    container = symbol.offsetParent || element;
+    // Object bounds: Either choose symbol's, element's offsetParent or root as container
+    // FIXME: Descendants of body with position: fixed wouldn't have offsetParent: http://stackoverflow.com/questions/306305/what-would-make-offsetparent-null
+    container = symbol.offsetParent || element && element === symbol ? element.offsetParent || document.documentElement : element;
     var rect = getBoundingRect(container);
     
     var containerPos = getOffset(container) || {x: 0, y: 0};
