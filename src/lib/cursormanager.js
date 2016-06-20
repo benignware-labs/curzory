@@ -208,8 +208,9 @@ function CursorManager(options) {
   function getParents(element, selector) {
     var parents = [];
     var parent = element;
-    while (parent = parent.parentElement.closest(selector))
+    while (parent = parent.parentElement && parent.parentElement.closest(selector)) {
       parents.push(parent);
+    }
     return parents;
   }
   
@@ -225,7 +226,7 @@ function CursorManager(options) {
         // Detect if a mouse element exists and that it's not the symbol itself
         if (mouseElement) {
           // Check if mouse element is not contained in a link
-          if (getParents(mouseElement, 'a').length === 0) { 
+          if (!mouseElement.href && !getParents(mouseElement, 'a').length) { 
             // Detect if symbol is topmost element
             if (topmost(mouseElement, symbol) === symbol) {
               // Detect if mouse element is contained

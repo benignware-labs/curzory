@@ -89,7 +89,6 @@ function comparePosition(a, b){
 }
 
 module.exports = function(a, b) {
-  
   // Compare Visibility
   var visibility = compareVisibility(a, b);
   if (visibility !== 0) {
