@@ -1,8 +1,8 @@
 var
-  
+
   merge = require('./merge'),
   topmost = require('./topmost'),
-  
+
   /**
    * Hyphenate a string
    * @param {String} string
@@ -15,7 +15,7 @@ var
       })();
     };
   })(),
-  
+
   getStyle = function(el, cssprop){
    if (el.currentStyle) //IE
     return el.currentStyle[cssprop];
@@ -24,7 +24,7 @@ var
    else //try and get inline style
     return el.style[cssprop];
   },
-  
+
   transformStyle = (function(prop, prefixes) {
     var i,
       elem = document.createElement('div'),
@@ -36,7 +36,7 @@ var
     }
     return null;
   })('transform', ['', 'Moz', 'Webkit', 'O', 'Ms']),
-  
+
   isChildOf = function(parent, child) {
    if (!child || !parent) {
      return false;
@@ -50,7 +50,7 @@ var
    }
    return false;
   },
-  
+
   css = function(elem, name, value) {
     var map = {}, cssText = null;
     if (typeof name === 'object') {
@@ -75,7 +75,7 @@ var
     }
     return elem.style[name] || window.getComputedStyle(elem, null).getPropertyValue(name);
   },
-  
+
   getOffset = function(element) {
     var
       scrollOffset = getScrollOffset(),
@@ -85,14 +85,14 @@ var
       left: rect.left + scrollOffset.left
     };
   },
-  
+
   getScrollOffset = function() {
     return {
       left: document.body && document.body.scrollLeft + document.documentElement.scrollLeft,
       top: document.body && document.body.scrollTop + document.documentElement.scrollTop
     };
   },
-  
+
   getBoundingRect = function(element) {
     if (!element) {
       return {
@@ -111,13 +111,13 @@ var
       height: rect.height
     };
   },
-  
+
   // Declare singleton instance
   instance = null;
 
 /**
  * CursorManager
- * This singleton class handles all cursor objects 
+ * This singleton class handles all cursor objects
  * @param {Object} options
  */
 function CursorManager(options) {
@@ -128,7 +128,7 @@ function CursorManager(options) {
   }
   instance = this;
   // Implementation
-  
+
   var cursors = [];
   var client = {x: 0, y: 0};
   var mouse = {x: -Infinity, y: -Infinity, element: null};
@@ -137,15 +137,15 @@ function CursorManager(options) {
   var cursorItem = null;
   var clicking = false;
   var clickable = true;
-  
+
   function init() {
     if (!('ontouch' in window)) {
       addMouseListeners(window);
     }
   }
-  
+
   function handleEvent(e) {
-    
+
     // Check for access to event's type property
     try {
       e.type;
@@ -176,13 +176,13 @@ function CursorManager(options) {
       mouse.x = client.x + scrollOffset.left;
       mouse.y = client.y + scrollOffset.top;
       mouse.element = e.target;
-      
-      
+
+
     }
-    
+
     // Get Cursor Props
     invalidate.call(this);
-    
+
     // Process Click
     switch (e.type) {
       case 'click':
@@ -204,7 +204,7 @@ function CursorManager(options) {
     // Update cursors
     render.call(instance);
   }
-  
+
   // http://stackoverflow.com/questions/18663941/finding-closest-element-without-jquery
   // Fix IE
   function closest(el, selector) {
@@ -232,7 +232,7 @@ function CursorManager(options) {
 
     return null;
   }
-  
+
   function getParents(element, selector) {
     var parents = [];
     var parent = element;
@@ -241,20 +241,20 @@ function CursorManager(options) {
     }
     return parents;
   }
-  
+
   function invalidate() {
-    
+
     cursorItems = cursors.map(function(cursor, index) {
       return getCursorItem(cursor, cursorItems[index]);
     });
-    
+
     var
       filtered = cursorItems.filter(function(cursorItem, index) {
         var mouseElement = mouse.element, symbol = cursorItem.symbol, bounds = cursorItem.bounds, container = cursorItem.container, result = false;
         // Detect if a mouse element exists and that it's not the symbol itself
         if (mouseElement) {
           // Check if mouse element is not contained in a link
-          if (!mouseElement.href && !getParents(mouseElement, 'a').length) { 
+          if (!mouseElement.href && !getParents(mouseElement, 'a').length) {
             // Detect if symbol is topmost element
             if (topmost(mouseElement, symbol) === symbol) {
               // Detect if mouse element is contained
@@ -280,21 +280,21 @@ function CursorManager(options) {
         var d2 = Math.sqrt( Math.pow((p2.x - mouse.x), 2) + Math.pow((p2.y - mouse.y), 2) );
         return d1 < d2 ? d1 : d1 > d2 ? d2 : 0;
       }).reverse();
-    
+
     cursorItem = sorted[0];
-    
-    
+
+
     // Set MouseProviders
     setMouseProviders([window].concat(cursorItems.map(function(item) {
       return item.container;
     })));
     //setMouseProviders([window]);
   }
-  
+
   function render() {
 
     cursorItems.forEach(function(item) {
-      
+
       var
         symbol = item.symbol,
         style = {
@@ -302,7 +302,7 @@ function CursorManager(options) {
           position: 'absolute',
           cursor: 'inherit'
         };
-        
+
       if (item.style === 'transform' && transformStyle) {
         style[transformStyle + "Origin"] = '';
         style[transformStyle] = "";
@@ -310,24 +310,24 @@ function CursorManager(options) {
         style.left = "";
         style.top = "";
       }
-      
+
       symbol.classList && !symbol.classList.contains("cursor") && symbol.classList.add("cursor");
       css(symbol, style);
-      
+
       if (cursorItem === item) {
-        
+
         var pos = getOffset(symbol);
-        
+
         var px = pos.left;
         var py = pos.top;
-        
+
         var off = item.offset;
         var x = Math.round((mouse.x - px) + off.left);
         var y = Math.round((mouse.y - py) + off.top);
-        
+
         style = {
         };
-        
+
         if (item.style === 'transform' && transformStyle) {
           style[transformStyle + "Origin"] = '0 0';
           style[transformStyle] = "translate3d(" + x + "px," + y + "px, 0) scale(" + item.scale + "," + item.scale + ")";
@@ -335,11 +335,11 @@ function CursorManager(options) {
           style.left = (x + pos.left) + "px";
           style.top = (y + pos.top) + "px";
         }
-        
+
         css(symbol, style);
       }
-      
-      
+
+
       if (item === cursorItem) {
         symbol.classList && !symbol.classList.contains("cursor-active") && symbol.classList.add("cursor-active");
         symbol.classList && symbol.classList.contains("cursor-hidden") && symbol.classList.remove("cursor-hidden");
@@ -347,27 +347,27 @@ function CursorManager(options) {
         symbol.classList && symbol.classList.contains("cursor-active") && symbol.classList.remove("cursor-active");
         symbol.classList && !symbol.classList.contains("cursor-hidden") && symbol.classList.add("cursor-hidden");
       }
-      
+
     });
   };
-  
+
   this.update = function() {
     invalidate.call(this);
     render.call(this);
   };
-  
+
   this.add = function(cursor) {
     if (cursors.indexOf(cursor) === -1) {
       cursors.push(cursor);
       this.update();
     }
   };
-  
+
   this.remove = function(cursor) {
     cursors.splice(cursors.indexOf(cursor), 1);
     this.update();
   };
-  
+
   var mouseProviders = [];
   function setMouseProviders(elements) {
     elements = elements.filter(function(n) { return (n); });
@@ -383,31 +383,31 @@ function CursorManager(options) {
     });
     mouseProviders = elements;
   }
-  
+
   function addMouseListeners(element) {
     for (var i = 0, event; event = events[i]; i++) {
       element.addEventListener(event, handleEvent);
     }
   }
-  
+
   function removeMouseListeners(element) {
     for (var i = 0, event; event = events[i]; i++) {
       element.removeEventListener(event, handleEvent);
     }
   }
-  
+
   init.call(this);
-  
+
 }
 
 
 
 function getCursorItem(cursor) {
-  
+
   var
     element = cursor.get('element'),
-    props = cursor.get(), 
-    symbol = props.symbol, 
+    props = cursor.get(),
+    symbol = props.symbol,
     bounds = props.bounds,
     offset = props.offset,
     style = props.style,
@@ -415,27 +415,27 @@ function getCursorItem(cursor) {
     target = props.target || symbol.nodeName.toLowerCase() === 'a' ? symbol : element,
     container,
     display = element.style.display;
-    
+
   // Force visibility to get things measured
   css(element, {
     display: ''
   });
-  
-  // 
+
+  //
   props = cursor.get();
-  
+
   symbol = props.symbol;
   bounds = props.bounds;
   offset = props.offset;
   style = props.style;
   scale = props.scale;
   target = props.target || symbol.nodeName.toLowerCase() === 'a' ? symbol : element;
-  
+
   // Add cursor symbol to dom
   if (!symbol.parentNode) {
     element.appendChild(symbol);
   }
-  
+
   // Get bounds and container
   if (bounds && bounds.getBoundingClientRect) {
     // Element bounds
@@ -446,11 +446,11 @@ function getCursorItem(cursor) {
     // FIXME: Descendants of body with position: fixed wouldn't have offsetParent: http://stackoverflow.com/questions/306305/what-would-make-offsetparent-null
     container = symbol.offsetParent || element && element === symbol ? element.offsetParent || document.documentElement : element;
     var rect = getBoundingRect(container);
-    
+
     var containerPos = getOffset(container) || {x: 0, y: 0};
-    // Process custom function 
+    // Process custom function
     if (typeof bounds === 'function') {
-      bounds = bounds(container);
+      bounds = bounds.apply(element, [container]);
     }
     // Get percent values
     var x = typeof bounds.x === 'string' && bounds.x.indexOf("%") >= 0 ? parseFloat(bounds.x) * rect.width / 100 : parseFloat(bounds.x);
@@ -464,10 +464,10 @@ function getCursorItem(cursor) {
       height: height
     };
   }
-  
+
   // Reset visibility
   css(element, 'display', display);
-  
+
   return merge(props, {
     cursor: cursor,
     symbol: symbol,
