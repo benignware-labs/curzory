@@ -15,7 +15,7 @@
   "bugs": {
     "url": "https://github.com/benignware-labs/curzory/issues"
   },
-  "main": "dist/curzory.js",
+  "main": "src/curzory.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
