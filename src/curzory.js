@@ -1,6 +1,6 @@
 var
   CursorManager = require('./lib/CursorManager'),
-  Cursor = require('./lib/Cursor');
+  Cursor = require('./lib/Cursor'),
   cursorManager = new CursorManager();
 
 module.exports = function curzory(element, options) {
